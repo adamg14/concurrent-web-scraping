@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup;
+import sys
 
 def web_scraping(url):
     about_elon = False
@@ -12,17 +13,55 @@ def web_scraping(url):
     # news article title
     titles = parse_html.find_all('title')
     # if title and subtitle include anything about Elon Musk and his companies the article is about him
-    print(titles)
     for i in range(len(titles)):
         if ("Elon" in str(titles[i])):
             about_elon = True
-            
+        if ("Musk" in str(titles[i])):
+            about_elon = True
+        if ("X" in str(titles[i]) and "Social Media" in str(titles[i])):
+            about_elon = True
+        if ("SpaceX" in str(titles[i])):
+            about_elon = True
+        if ("Tesla" in str(titles[i])):
+            about_elon = True
+        if ("HyperLoop" in str(titles[i])):
+            about_elon = True
+        if ("Neuralink" in str(titles[i])):
+            about_elon = True
     
+    # any heading tags
+    h1_tags = parse_html.find_all('h1')
+    h2_tags = parse_html.find_all('h2')
+    h3_tags = parse_html.find_all('h3')
+    h4_tags = parse_html.find_all('h4')
+    
+    for i in range(len(h1_tags)):
+        if ("Elon" in str(h1_tags[i])):
+            about_elon = True
+        if ("Musk" in str(h1_tags[i])):
+            about_elon = True
+        if ("X" in str(h1_tags[i]) and "Social Media" in str(h1_tags[i])):
+            about_elon = True
+        if ("SpaceX" in str(h1_tags[i])):
+            about_elon = True
+        if ("Tesla" in str(h1_tags[i])):
+            about_elon = True
+        if ("HyperLoop" in str(h1_tags[i])):
+            about_elon = True
+        if ("Neuralink" in str(h1_tags[i])):
+            about_elon = True
+    
+    # if the headings and titles do not include any keywords associated with Elon Musk, the articles paragraph tags must explicity mention his name
+    paragraph_tags = parse_html.find_all('p')
+    for i in range(len(paragraph_tags)):
+        if ("Elon Musk" in str(paragraph_tags[i])):
+            about_elon = True
+            
     if about_elon:
-        print("Article about Elon")
+        print("Article associated with Elon Musk")
     else:
-        print("Article not about Elon")
-        
-web_scraping("https://www.bbc.co.uk/news/technology-66850821")
-web_scraping("https://news.sky.com/story/youtube-suspends-adverts-on-russell-brands-videos-after-comedian-accused-of-rape-and-sexual-assault-12964714")
+        print("Article not associated with Elon Musk")
+
+# second command line argument will be the article to be passed into (the first command line arguments after the python command is the script to be run)
+web_scraping(sys.argv[1])
 
