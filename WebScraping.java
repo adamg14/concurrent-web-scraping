@@ -2,12 +2,20 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunJava{
-    public static void main(String[] args){
+public class WebScraping extends Thread{
+
+    private int threadNumber;
+    private String articleURL;
+    public WebScraping(String _articleURL, int _threadNumber){
+        this.threadNumber = _threadNumber;
+        this.articleURL = _articleURL;
+    }
+
+    public void run(){
         try{
-            String script = "hello.py";
+            String script = "web_scraping.py";
             // create a new process to run the python file
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "hello.py", "adam");
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "/Users/adam/Documents/multithreading-projects/concurrent-web-scraping/web_scraping.py", articleURL);
 
             processBuilder.redirectErrorStream(true);
 
@@ -21,13 +29,12 @@ public class RunJava{
             String line;
             List<String> output = new ArrayList<String>();
             while((line = reader.readLine()) != null){
-                System.out.println(line);
                 output.add(line);
             }
-
             for(int i = 0; i < output.size(); i++){
-                System.out.print(output.get(i));
+                System.out.println("Article " + threadNumber + " result: " + output.get(i));
             }
+
             // wait for the script to complete
             int exit = process.waitFor();
         }catch(IOException | InterruptedException e){
